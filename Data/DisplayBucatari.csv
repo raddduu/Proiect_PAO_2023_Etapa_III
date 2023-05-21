@@ -1,0 +1,4 @@
+Id: 1, Prenume: "George", Nume: "Popescu", Gen: "M", An: 2000, Luna: 5, Zi: 20, Experienta: 3, Specializare: "Arabesc", Rang: 1, RestaurantID: 1
+Id: 3, Prenume: "Gabriela", Nume: "Enachescu", Gen: "F", An: 1999, Luna: 10, Zi: 18, Experienta: 5, Specializare: "Arabesc", Rang: 2, RestaurantID: 1
+Id: 4, Prenume: "Paul", Nume: "Marinache", Gen: "M", An: 1998, Luna: 5, Zi: 17, Experienta: 6, Specializare: "Arabesc", Rang: 3, RestaurantID: 2
+Id: 2, Prenume: Ioana, Nume: Ana, Gen: F, An: 2003, Luna: 7, Zi: 19, Experienta: 0, Specializare: "Italian", Rang: 1, RestaurantID: 1
