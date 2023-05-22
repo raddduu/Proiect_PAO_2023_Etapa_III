@@ -1,18 +1,32 @@
+import Config.DatabaseConfiguration;
 import Model.*;
+import Model.Locatie.Locatie;
+import Model.Locatie.LocatieDatabase;
+import Model.Oras.Oras;
+import Model.Oras.OrasDatabase;
 import Model.Persoana.Bucatar.Bucatar;
+import Model.Persoana.Bucatar.BucatarDatabase;
 import Model.Persoana.Client.Client;
 import Model.Persoana.Persoana;
 import Model.Persoana.Sofer.Sofer;
+import Model.Persoana.Sofer.SoferDatabase;
 import Service.*;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Scanner in = new Scanner(System.in);
+        DatabaseConfiguration connection = new DatabaseConfiguration();
+        var soferiDatabase = new SoferDatabase(connection);
+        var bucatariDatabase = new BucatarDatabase(connection);
+        var oraseDatabase = new OrasDatabase(connection);
+        var locatiiDatabase = new LocatieDatabase(connection);
+
         ProdusService produsService = new ProdusService();
         PersoanaService persoanaService = new PersoanaService();
         ComandaService comandaService = new ComandaService(produsService, persoanaService);
@@ -22,193 +36,155 @@ public class Main {
 
         try {
             persoanaService.readBucatari();
+            try {
+                for (Bucatar buc : persoanaService.getAllBucatari()) {
+                    bucatariDatabase.createBucatar(new Bucatar(buc.getId(), buc.getPrenume(), buc.getNume_de_familie(), buc.getGen(), buc.getAn_nastere(), buc.getLuna_nastere(), buc.getZi_nastere(), buc.getAni_experienta(), buc.getSpecializare(), buc.getRang(), buc.getRestaurantid()));
+                }
+
+                System.out.println("Bucatari inserati in baza de date.");
+                System.out.println("Continutul Bazei de Date:");
+                for (Bucatar bucatar : bucatariDatabase.readBucatari()) {
+                    System.out.println(bucatar.toString());
+                }
+
+                System.out.println("Introduceti noile date:");
+                System.out.println("Nume: ");
+                String nume = in.nextLine();
+                System.out.println("Prenume: ");
+                String prenume = in.nextLine();
+                System.out.println("Id: ");
+                int id = Integer.parseInt(in.nextLine());
+                System.out.println("Gen: ");
+                String gen = in.nextLine();
+                System.out.println("Anul nasterii: ");
+                int an = Integer.parseInt(in.nextLine());
+                System.out.println("Luna nasterii: ");
+                int luna = Integer.parseInt(in.nextLine());
+                System.out.println("Ziua nasterii: ");
+                int ziua = Integer.parseInt(in.nextLine());
+                System.out.println("Ani de experienta: ");
+                int exp = Integer.parseInt(in.nextLine());
+                System.out.println("Specializare: ");
+                String specializare = in.nextLine();
+                System.out.println("Rang: ");
+                int rang = Integer.parseInt(in.nextLine());
+                System.out.println("Id restaurant: ");
+                int rid = Integer.parseInt(in.nextLine());
+                Bucatar bucatar = new Bucatar(id, prenume, nume, gen, an, luna, ziua, exp, specializare, rang, rid);
+                bucatariDatabase.updateBucatar(bucatar);
+
+                System.out.println("Id-ul bucatarului de sters:");
+                int id_buc = Integer.parseInt(in.nextLine());
+                bucatariDatabase.deleteBucatar((Bucatar) persoanaService.searchById(id_buc));
+            } catch (Exception e) {
+                System.out.println("Eroare la inserarea bucatarilor: " + e);
+            }
         } catch (ParseException e) {
-           throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
+
 
         try {
             persoanaService.readSoferi();
+            try {
+                for (Sofer sof : persoanaService.getAllSoferi()) {
+                    soferiDatabase.createSofer(new Sofer(sof.getId(), sof.getPrenume(), sof.getNume_de_familie(), sof.getGen(), sof.getAn_nastere(), sof.getLuna_nastere(), sof.getZi_nastere(), sof.getAni_experienta(), sof.getNr_clienti(), sof.getScor_total()));
+                }
+                System.out.println("Soferi inserati in baza de date.");
+                System.out.println("Continutul Bazei de Date:");
+                for (Sofer sofer : soferiDatabase.readSoferi()) {
+                    System.out.println(sofer.toString());
+                }
+
+                System.out.println("Introduceti noile date:");
+                System.out.println("Nume: ");
+                String nume = in.nextLine();
+                System.out.println("Prenume: ");
+                String prenume = in.nextLine();
+                System.out.println("Id: ");
+                int id = Integer.parseInt(in.nextLine());
+                System.out.println("Gen: ");
+                String gen = in.nextLine();
+                System.out.println("Anul nasterii: ");
+                int an = Integer.parseInt(in.nextLine());
+                System.out.println("Luna nasterii: ");
+                int luna = Integer.parseInt(in.nextLine());
+                System.out.println("Ziua nasterii: ");
+                int ziua = Integer.parseInt(in.nextLine());
+                System.out.println("Ani de experienta: ");
+                int exp = Integer.parseInt(in.nextLine());
+                System.out.println("Numar client: ");
+                int nrc = Integer.parseInt(in.nextLine());
+                System.out.println("Scor total: ");
+                int scor = Integer.parseInt(in.nextLine());
+                Sofer sofer = new Sofer(id, prenume, nume, gen, an, luna, ziua, exp, nrc, scor);
+                soferiDatabase.updateSofer(sofer);
+
+                System.out.println("Id-ul soferului de sters:");
+                int id_sof = Integer.parseInt(in.nextLine());
+                soferiDatabase.deleteSofer((Sofer) persoanaService.searchById(id_sof));
+            } catch (Exception e) {
+                System.out.println("Eroare la inserarea soferilor: " + e);
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         try {
             locatieService.readLocatii();
+            try {
+                for (Locatie loc : locatieService.getAllLocatii()) {
+                    locatiiDatabase.createLocatie(new Locatie(loc.getId(), loc.getCityid(), loc.getStrada(), loc.getNumar()));
+                }
+
+                System.out.println("Locatii inserate in baza de date.");
+                System.out.println("Introduceti noile date:");
+                System.out.println("Id: ");
+                int id = Integer.parseInt(in.nextLine());
+                System.out.println("City Id: ");
+                int cityid = Integer.parseInt(in.nextLine());
+                System.out.println("Strada: ");
+                String strada = in.nextLine();
+                System.out.println("Numar: ");
+                int numar = Integer.parseInt(in.nextLine());
+                Locatie locatie = new Locatie(id, cityid, strada, numar);
+                locatiiDatabase.updateLocatie(locatie);
+
+                System.out.println("Id-ul locatiei de sters:");
+                int id_loc = Integer.parseInt(in.nextLine());
+                locatiiDatabase.deleteLocatie(locatieService.searchById(id_loc));
+            } catch (Exception e) {
+                System.out.println("Eroare la inserarea locatiilor: " + e);
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
 
         try {
             orasService.readOrase();
+            try {
+                for (Oras oras : orasService.getAllOrase()) {
+                    oraseDatabase.createOras(new Oras(oras.getId(), oras.getNume(), oras.getNr_locuitori()));
+                }
+                System.out.println("Orase inserate in baza de date.");
+                System.out.println("Introduceti noile date:");
+                System.out.println("Id: ");
+                int id = Integer.parseInt(in.nextLine());
+                System.out.println("Nume: ");
+                String nume = in.nextLine();
+                System.out.println("Numar locuitori: ");
+                int numar_loc = Integer.parseInt(in.nextLine());
+                Oras oras = new Oras(id, nume, numar_loc);
+                oraseDatabase.updateOras(oras);
+
+                System.out.println("Id-ul locatiei de sters:");
+                int id_loc = Integer.parseInt(in.nextLine());
+                oraseDatabase.deleteOras(orasService.searchById(id_loc));
+            } catch (Exception e) {
+                System.out.println("Eroare la inserarea oraselor: " + e);
+            }
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
-        boolean running = true;
-        while (running) {
-            System.out.println("Meniu:");
-            System.out.println("1. Adauga client");
-            System.out.println("2. Actualizeaza persoana");
-            System.out.println("3. Sterge persoana");
-            System.out.println("4. Cauta persoana dupa id");
-            System.out.println("5. Afiseaza toate persoanele");
-            System.out.println("6. Verifica daca un client se potriveste cu un restaurant");
-            System.out.println("7. Verifica daca o comanda este sigura pentru client");
-            System.out.println("8. Afiseaza varsta unei persoane");
-            System.out.println("9. Afiseaza rating-ul unui sofer");
-            System.out.println("10. Verifica daca un bucatar este valid");
-            System.out.println("11. Iesire");
-            System.out.print("Alege optiunea: ");
-            int choice = Integer.parseInt(in.nextLine());
-
-            switch (choice) {
-                case 1 -> {
-                    System.out.println("Adauga o persoana noua:");
-                    try{
-                        auditService.logAction(persoanaService.addClient(in));
-                    }
-                    catch (Exception e) {
-                        System.out.println("Operatie esuata: " + e);
-                    }
-                }
-                case 2 -> {
-                    System.out.println("Actualizeaza persoana cu id-ul:");
-                    int id = Integer.parseInt(in.nextLine());
-                    try{
-                        auditService.logAction(persoanaService.update(id, in));
-                    }
-                    catch (Exception e) {
-                        System.out.println("Operatie esuata: " + e);
-                    }
-                }
-                case 3 -> {
-                    System.out.println("Sterge persoana dupa Id:");
-                    System.out.print("Introduceti Id-ul: ");
-                    int deleteId = Integer.parseInt(in.nextLine());
-                    try{
-                        auditService.logAction(persoanaService.deletePersoanaById(deleteId));
-                    }
-                    catch (Exception e) {
-                        System.out.println("Operatie esuata: " + e);
-                    }
-
-                }
-                case 4 -> {
-                    System.out.println("Cauta persoana dupa Id:");
-                    System.out.print("Introduceti Id-ul: ");
-                    int searchId = Integer.parseInt(in.nextLine());
-                    Persoana foundPerson = persoanaService.searchById(searchId);
-                    if (foundPerson != null) {
-                        System.out.println("Persoana gasita: " + foundPerson);
-                    } else {
-                        System.out.println("Persoana nu a fost gasita.");
-                    }
-                }
-
-                case 5 -> {
-                    System.out.println("Afiseaza toate persoanele:");
-
-                    System.out.println("Clienti:");
-                    List<Client> clients = persoanaService.getAllClienti();
-                    for (Client client : clients) {
-                        System.out.println(client);
-                    }
-
-                    System.out.println("Bucatari:");
-                    List<Bucatar> bucatari = persoanaService.getAllBucatari();
-                    for (Bucatar bucatar : bucatari) {
-                        System.out.println(bucatar);
-                    }
-
-                    System.out.println("Soferi:");
-                    List<Sofer> soferi = persoanaService.getAllSoferi();
-                    for (Sofer sofer : soferi) {
-                        System.out.println(sofer);
-                    }
-                }
-                case 6 -> {
-                    System.out.println("Introduceti id-ul clientului:");
-                    int clientId = Integer.parseInt(in.nextLine());
-                    System.out.println("Introduceti detalii restaurant:");
-                    System.out.println("Id:");
-                    int restaurantId = Integer.parseInt(in.nextLine());
-                    System.out.println("Locatie Id:");
-                    int locatieId = Integer.parseInt(in.nextLine());
-                    System.out.println("Suprafata:");
-                    int suprafata = Integer.parseInt(in.nextLine());
-                    System.out.println("Nume:");
-                    String nume = in.nextLine();
-                    System.out.println("Specific:");
-                    String specific = in.nextLine();
-                    System.out.println("Numar de avize:");
-                    int nrAvize = Integer.parseInt(in.nextLine());
-                    List<String> lista_avize = new ArrayList<>();
-                    for (int i = 0; i < nrAvize; i++) {
-                        System.out.println("Aviz " + (i + 1) + ":");
-                        lista_avize.add(in.nextLine());
-                    }
-                    Restaurant restaurant = new Restaurant(restaurantId, locatieId, suprafata, nume, specific, lista_avize);
-                    if (persoanaService.sePotriveste(clientId, restaurant)) {
-                        System.out.println("Clientul se potriveste cu restaurantul.");
-                    } else {
-                        System.out.println("Clientul nu se potriveste cu restaurantul.");
-                    }
-                }
-                case 7 -> {
-                    System.out.println("Comanda sigura:");
-                    System.out.print("Introduceti Id-ul comenzii: ");
-                    int comandaId = Integer.parseInt(in.nextLine());
-                    boolean comandaSigura = comandaService.comandaSigura(comandaId, persoanaService);
-                    System.out.println("Comanda sigura: " + comandaSigura);
-                }
-                case 8 -> {
-                    System.out.println("Afiseaza varsta unei persoane:");
-                    System.out.print("Introduceti Id-ul persoanei: ");
-                    int persoanaId = Integer.parseInt(in.nextLine());
-                    int age = persoanaService.getAge(persoanaId);
-                    if (age != -1) {
-                        System.out.println("Varsta persoanei: " + age);
-                    } else {
-                        System.out.println("Persoana nu a fost gasita.");
-                    }
-                }
-
-                case 9 -> {
-                    System.out.println("Afiseaza rating-ul unui sofer:");
-                    System.out.print("Introduceti Id-ul soferului: ");
-                    int soferId = Integer.parseInt(in.nextLine());
-                    double rating = persoanaService.getRating(soferId);
-                    if (rating != -1) {
-                        System.out.println("Rating-ul soferului: " + rating);
-                    } else {
-                        System.out.println("Soferul nu a fost gasit.");
-                    }
-                }
-
-                case 10 -> {
-                    System.out.println("Verifica daca un bucatar este valid:");
-                    System.out.print("Introduceti Id-ul bucatarului: ");
-                    int bucatarId = Integer.parseInt(in.nextLine());
-                    boolean valid = persoanaService.valid(bucatarId);
-                    if (valid) {
-                        System.out.println("Bucatarul este valid.");
-                    } else {
-                        System.out.println("Bucatarul nu este valid sau nu a fost gasit.");
-                    }
-                }
-
-                case 11 -> {
-                    System.out.println("Iesire");
-                    running = false;
-                    break;
-                }
-
-                default -> {
-                    System.out.println("Optiune invalida!");
-                }
-            }
-        }
-
-        in.close();
     }
 }
