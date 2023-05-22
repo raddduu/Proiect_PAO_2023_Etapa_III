@@ -1,8 +1,8 @@
-Id: 1, Nume: "Bucuresti", Locuitori: 2000000
-Id: 2, Nume: "Iasi", Locuitori: 200000
-Id: 3, Nume: "Timisoara", Locuitori: 300000
-Id: 4, Nume: "Ploiesti", Locuitori: 150000
-Id: 5, Nume: "Constanta", Locuitori: 150000
-Id: 6, Nume: "Brasov", Locuitori: 125000
-Id: 7, Nume: "Cluj", Locuitori: 300000
-Id: 8, Nume: "Oradea", Locuitori: 200000
+Id: 1, CityId: 1, Strada: "Strada Matei Basarab", Numar: 2
+Id: 2, CityId: 2, Strada: "Strada Calea Mosilor", Numar: 10
+Id: 3, CityId: 3, Strada: "Bulevardul Iuliu Maniu", Numar: 5
+Id: 4, CityId: 4, Strada: "Strada Ion Mateescu", Numar: 12
+Id: 5, CityId: 5, Strada: "Bulevardul Unirii", Numar: 8
+Id: 6, CityId: 6, Strada: "Bulevardul Mihai Viteazu", Numar: 10
+Id: 7, CityId: 7, Strada: "Strada Lalelelor", Numar: 23
+Id: 8, CityId: 8, Strada: "Strada Costache Popovici", Numar: 54

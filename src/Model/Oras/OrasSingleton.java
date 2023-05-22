@@ -53,7 +53,7 @@ public class OrasSingleton {
 
     public void scrieCSV(ArrayList<Oras> orase){
         try{
-            var writer = new FileWriter("Data/DisplayLocatii.csv");
+            var writer = new FileWriter("Data/DisplayOrase.csv");
             for(var Oras : orase){
                 writer.write(Oras.toCSV());
                 writer.write("\n");
